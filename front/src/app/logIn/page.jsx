@@ -1,7 +1,10 @@
+import LoginForm from "../../components/LoginForm";
 export const metadata = {
   title: "LogIn",
 };
 
-export default function HomePage (){
-    return <h1>Hello Word in logIn</h1>
+export default function LogIn (){
+    return <main>
+      <LoginForm />
+    </main>;
 }

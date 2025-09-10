@@ -3,7 +3,7 @@ import "./Navbar.css";
 
 export default function Navbar() {
   return (
-    <nav className="navbar py-5">
+    <nav className="navbar py-5 shadow-lg p-4 mb-4 bg-gray-800 border-t-4 border-blue-500">
       <Link href="/">
         <h1 className="text-3xl font-bold">Cesar's Guide</h1>
       </Link>
