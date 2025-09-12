@@ -1,41 +1,27 @@
 "use client";
-import "./RegisterForm.css";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 export default function LoginForm() {
   const [error, setError] = useState(null);
+  const router = useRouter();
+  const { login } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
     const email = formData.get("email");
     const password = formData.get("password");
-
     setError(null);
 
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message || "Error desconocido");
-        return;
-      }
-
-
-    } catch (error) {
-      console.log(error);
-      setError(error.response?.data?.message || "Error en el login");
+    const { ok, data } = await login(email, password);
+    if (!ok) {
+      setError(data.message || "Error desconocido");
+      return;
     }
+    router.push("/dashboard/user");
   };
 
   return (
@@ -52,7 +38,6 @@ export default function LoginForm() {
             Ingresar
           </button>
           {error && <div className="text-red-500 text-sm py-1 px-3 mt-2">{error}</div>}
-
           <Link
             href="../register"
             className="text-sm mt-3 text-right text-blue-500 hover:underline"

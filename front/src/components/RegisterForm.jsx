@@ -2,9 +2,11 @@
 import Link from "next/link";
 import "./RegisterForm.css";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,6 +35,7 @@ export default function RegisterForm() {
         setError(data.message || "Error en el registro");
         return;
       }
+      router.push("/login");
     } catch (error) {
       console.log(error);
       setError(error.response?.data?.message || "Error en el registro");
@@ -59,7 +62,7 @@ export default function RegisterForm() {
           {error && <div className="text-red-500 text-sm py-1 px-3 mt-2">{error}</div>}
 
           <Link
-            href="../logIn"
+            href="../login"
             className="text-sm mt-3 text-right text-blue-500 hover:underline"
           >
             ¿Ya tienes una cuenta? Inicia sesión

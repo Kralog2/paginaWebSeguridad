@@ -4,8 +4,9 @@ import { conectDB } from "@/libs/mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { seedAdmin } from "@/libs/seedAdmin";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET || "jwt_secret_key";
 
 export async function POST(request: Request) {
   const { email, password } = await request.json();
@@ -56,6 +57,8 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24 * 7,
     });
 
+    console.log("Usuario autenticado:", user.email);
+
     return NextResponse.json({
       _id: user._id,
       email: user.email,
@@ -70,4 +73,5 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+  
 }
