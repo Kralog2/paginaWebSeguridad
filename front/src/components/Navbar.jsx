@@ -2,9 +2,16 @@
 import Link from "next/link";
 import "./Navbar.css";
 import { useUser } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const { user, logout } = useUser();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/login");
+  };
 
   return (
     <nav className="navbar py-5 shadow-lg p-4 mb-4 bg-gray-800 border-t-4 border-blue-500">
@@ -36,7 +43,7 @@ export default function Navbar() {
               <Link href="/dashboard/user">Perfil</Link>
             </li>
             <li>
-              <button className="text-red-400 hover:underline" onClick={logout}>
+              <button className="text-red-400 hover:underline" onClick={handleLogout}>
                 Logout
               </button>
             </li>

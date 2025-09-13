@@ -56,7 +56,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex justify-left">
                   <a
-                    href="/skyrim"
+                    href="/dashboard/gamesPages/skyrim"
                     className="bg-blue-600 text-amber-50 font-bold cursor-pointer hover:bg-blue-700 px-6 py-2 rounded-md mt-5 text-center"
                   >
                     Ver guia
@@ -85,7 +85,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex justify-left">
                   <a
-                    href="/fallout4"
+                    href="/dashboard/gamesPages/fallout4"
                     className="bg-blue-600 text-amber-50 font-bold cursor-pointer hover:bg-blue-700 px-6 py-2 rounded-md mt-5 text-center"
                   >
                     Ver guia
@@ -116,7 +116,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex justify-left">
                   <a
-                    href="/falloutnv"
+                    href="/dashboard/gamesPages/falloutnv"
                     className="bg-blue-600 text-amber-50 font-bold cursor-pointer hover:bg-blue-700 px-6 py-2 rounded-md mt-5 text-center"
                   >
                     Ver guia
@@ -146,7 +146,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex justify-left">
                   <a
-                    href="/kofxv"
+                    href="/dashboard/gamesPages/kofxv"
                     className="bg-blue-600 text-amber-50 font-bold cursor-pointer hover:bg-blue-700 px-6 py-2 rounded-md mt-5 text-center"
                   >
                     Ver guia
