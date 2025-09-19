@@ -1,4 +1,4 @@
-import Fallout4 from "../../../../components/fallout4";
+import Fallout4 from "../../../../components/Fallout4";
 
 export default function Fallout4Page() {
     return (
