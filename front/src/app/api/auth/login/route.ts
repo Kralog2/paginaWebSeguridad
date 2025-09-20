@@ -45,7 +45,7 @@ export async function POST(request: Request) {
         userType: user.userType,
       },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "30d" }
     );
 
     const cookiesStore = await cookies();
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24 * 30,
     });
 
     console.log("Usuario autenticado:", user.email);

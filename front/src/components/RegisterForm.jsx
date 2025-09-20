@@ -35,7 +35,7 @@ export default function RegisterForm() {
         setError(data.message || "Error en el registro");
         return;
       }
-      router.push("/login");
+      router.push("/logIn");
     } catch (error) {
       console.log(error);
       setError(error.response?.data?.message || "Error en el registro");
