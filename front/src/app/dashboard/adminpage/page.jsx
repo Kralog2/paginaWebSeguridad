@@ -11,7 +11,7 @@ export default function AdminPage() {
     const res = await fetch("/api/users");
     if (res.status === 401 || res.status === 403) {
       setError("Unauthorized");
-      router.push("/login");
+      router.push("/logIn");
       return;
     }
     const data = await res.json();
