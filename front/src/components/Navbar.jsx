@@ -10,7 +10,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     await logout();
-    router.push("/login");
+    router.push("/logIn");
   };
 
   return (
@@ -28,7 +28,7 @@ export default function Navbar() {
               <Link href="/register">Registrarse</Link>
             </li>
             <li>
-              <Link href="/login">LogIn</Link>
+              <Link href="/logIn">LogIn</Link>
             </li>
           </>
         )}

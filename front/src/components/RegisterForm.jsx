@@ -62,7 +62,7 @@ export default function RegisterForm() {
           {error && <div className="text-red-500 text-sm py-1 px-3 mt-2">{error}</div>}
 
           <Link
-            href="../login"
+            href="../logIn"
             className="text-sm mt-3 text-right text-blue-500 hover:underline"
           >
             ¿Ya tienes una cuenta? Inicia sesión

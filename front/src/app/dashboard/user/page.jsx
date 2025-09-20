@@ -13,7 +13,7 @@ export default function UserProfilePage() {
     const fetchUserData = async () => {
       const response = await fetch("/api/auth/me");
       if (response.status === 401) {
-        router.push("/login");
+        router.push("/logIn");
         return;
       }
       const data = await response.json();
