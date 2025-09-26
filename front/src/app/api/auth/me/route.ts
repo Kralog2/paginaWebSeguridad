@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import User from "@/models/user";
-import { conectDB } from "@/libs/mongodb";
+import { connectDB } from "@/libs/mongodb";
 
 const JWT_SECRET = process.env.JWT_SECRET || "jwt_secret_key";
 
@@ -17,7 +17,7 @@ export async function GET() {
 
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    await conectDB();
+    await connectDB();
     const user = await User.findById(decoded._id);
 
     if (!user) {

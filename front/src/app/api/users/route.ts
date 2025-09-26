@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import User from "@/models/user";
-import { conectDB } from "@/libs/mongodb";
+import { connectDB } from "@/libs/mongodb";
 
 const JWT_SECRET = process.env.JWT_SECRET || "jwt_secret_key";
 
@@ -23,7 +23,7 @@ export async function DELETE(request: Request) {
     }
     const { id } = await request.json();
 
-    await conectDB();
+    await connectDB();
     const user = await User.findByIdAndDelete(id);
 
     return NextResponse.json({ message: "Usuario eliminado" });
@@ -52,7 +52,7 @@ export async function GET() {
       );
     }
 
-    await conectDB();
+    await connectDB();
     const users = await User.find({}, "-password");
 
     return NextResponse.json(users);

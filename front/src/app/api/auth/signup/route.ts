@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import User from "@/models/user";
-import { conectDB } from "@/libs/mongodb";
+import { connectDB } from "@/libs/mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   try {
-    await conectDB();
+    await connectDB();
     const userFound = await User.findOne({ email });
     if (userFound)
       return NextResponse.json(

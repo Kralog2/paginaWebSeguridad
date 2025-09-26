@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import User from "@/models/user";
-import { conectDB } from "@/libs/mongodb";
+import { connectDB } from "@/libs/mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await conectDB();
+    await connectDB();
 
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
