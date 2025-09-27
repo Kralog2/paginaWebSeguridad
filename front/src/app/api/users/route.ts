@@ -1,36 +1,55 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "@/models/user";
 import { connectDB } from "@/libs/mongodb";
 
-const JWT_SECRET = process.env.JWT_SECRET || "jwt_secret_key";
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET not configured");
+}
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function DELETE(request: Request) {
   try {
     const cookiesStore = await cookies();
     const token = cookiesStore.get("token")?.value;
     if (!token) {
-      return NextResponse.json({ message: "No autorizado" }, { status: 401 });
+      return NextResponse.json({ message: "Not authorized." }, { status: 401 });
     }
-    const decoded = jwt.verify(token, JWT_SECRET);
 
-    if (decoded.userType !== "admin") {
+    let decoded: JwtPayload;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    } catch {
       return NextResponse.json(
-        { message: "Solo administradores" },
+        { message: "Invalid or expired token" },
+        { status: 401 }
+      );
+    }
+
+    if (typeof decoded !== "object" || decoded.userType !== "admin") {
+      return NextResponse.json(
+        { message: "Only administrators" },
         { status: 403 }
       );
     }
     const { id } = await request.json();
+    if (!id || typeof id !== "string" || !/^[0-9a-fA-F]{24}$/.test(id)) {
+      return NextResponse.json({ message: "Invalid user id" }, { status: 400 });
+    }
 
     await connectDB();
-    const user = await User.findByIdAndDelete(id);
+    const deleted = await User.findByIdAndDelete(id);
 
-    return NextResponse.json({ message: "Usuario eliminado" });
+    if (!deleted) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "User Deleted." });
   } catch (error) {
     return NextResponse.json(
-      { message: "Error de autenticación" },
-      { status: 401 }
+      { message: "Error in DELETE /usrs" },
+      { status: 500 }
     );
   }
 }
@@ -40,14 +59,22 @@ export async function GET() {
     const cookiesStore = await cookies();
     const token = cookiesStore.get("token")?.value;
     if (!token) {
-      return NextResponse.json({ message: "No autorizado" }, { status: 401 });
+      return NextResponse.json({ message: "Not authorized" }, { status: 401 });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET);
-
-    if (decoded.userType !== "admin") {
+    let decoded: JwtPayload;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    } catch {
       return NextResponse.json(
-        { message: "Solo administradores" },
+        { message: "Invalid or expired token" },
+        { status: 401 }
+      );
+    }
+
+    if (typeof decoded !== "object" || decoded.userType !== "admin") {
+      return NextResponse.json(
+        { message: "Only administrators" },
         { status: 403 }
       );
     }
@@ -58,8 +85,8 @@ export async function GET() {
     return NextResponse.json(users);
   } catch (error) {
     return NextResponse.json(
-      { message: "Error de autenticación" },
-      { status: 401 }
+      { message: "Error in GET /users", error },
+      { status: 500 }
     );
   }
 }
