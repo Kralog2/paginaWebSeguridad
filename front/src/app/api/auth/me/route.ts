@@ -9,6 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "jwt_secret_key";
 export async function GET() {
   try {
     const cookiesStore = await cookies();
+    console.log(cookiesStore);
     const token = cookiesStore.get("token")?.value;
 
     if (!token) {
