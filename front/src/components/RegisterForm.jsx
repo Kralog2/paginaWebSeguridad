@@ -27,17 +27,25 @@ export default function RegisterForm() {
         },
         body: JSON.stringify({ email, password, fullname, userType }),
       });
-      console.log(res);
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || "Error en el registro");
+        // TODO: Add internationalization.
+        if (data.message === "Email, password and fullname are required.") {
+          setError("Los datos son requeridos.");
+        } else if (data.message === "Invalid fullname") {
+          setError("Nombre inválido.");
+        } else if (data.message === "Password too weak") {
+          setError("Contraseña débil.");
+        } else {
+          setError(data.message || "Error en el registro");
+        }
         return;
       }
       router.push("/logIn");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setError(error.response?.data?.message || "Error en el registro");
     }
   };
@@ -59,7 +67,9 @@ export default function RegisterForm() {
           >
             Registrar
           </button>
-          {error && <div className="text-red-500 text-sm py-1 px-3 mt-2">{error}</div>}
+          {error && (
+            <div className="text-red-500 text-sm py-1 px-3 mt-2">{error}</div>
+          )}
 
           <Link
             href="../logIn"

@@ -4,6 +4,13 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const UserContext = createContext();
 
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+function isValidPassword(password) {
+  return password.length >= 8;
+}
+
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 
@@ -11,24 +18,48 @@ export function UserProvider({ children }) {
     fetch("/api/auth/me", { credentials: "include" })
       .then((res) => (res.ok ? res.json() : null))
       .then(setUser)
-      .catch(() => setUser(null));
+      .catch((error) => {
+        console.error("Failed to fetch current user: ", error);
+        setUser(null);
+      });
   }, []);
 
   const login = async (email, password) => {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await res.json();
-    if (res.ok) setUser(data);
-    return { ok: res.ok, data };
+    if (!isValidEmail(email) || !isValidPassword(password)) {
+      return {
+        ok: false,
+        data: { message: "Invalid email or password format" },
+      };
+    }
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      }).catch(() => {
+        return { ok: false, data: { message: "Error trying login." } };
+      });
+      const data = await res.json();
+      if (res.ok) setUser(data);
+      return { ok: res.ok, data };
+    } catch {
+      console.error("Login error:", err);
+      return { ok: false, data: { message: "Ocurred an error" } };
+    }
   };
 
   const logout = async () => {
-    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-    setUser(null);
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout error: ", error);
+    } finally {
+      setUser(null);
+    }
   };
 
   return (

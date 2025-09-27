@@ -6,7 +6,6 @@ export function isValidEmail(email: string) {
 
 export function isValidPassword(password: string) {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
-  console.log(password);
   return regex.test(password)
 }
 

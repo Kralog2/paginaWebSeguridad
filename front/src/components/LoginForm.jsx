@@ -10,18 +10,26 @@ export default function LoginForm() {
   const { login } = useUser();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email");
-    const password = formData.get("password");
-    setError(null);
+    try {
+      e.preventDefault();
+      const formData = new FormData(e.currentTarget);
+      const email = formData.get("email");
+      const password = formData.get("password");
+      setError(null);
 
-    const { ok, data } = await login(email, password);
-    if (!ok) {
-      setError(data.message || "Error desconocido");
-      return;
+      const { ok, data } = await login(email, password);
+      if (!ok) {
+        // TODO: Add internationalization.
+        if (data.message === "Invalid email or password format") {
+          setError("Credenciales inválidas" || "Error desconocido");
+        }
+        return;
+      }
+      router.push("/dashboard/user");
+    } catch (error) {
+      console.error(error)
+      setError(error.response?.data?.message || "Error en el registro");
     }
-    router.push("/dashboard/user");
   };
 
   return (
@@ -37,7 +45,9 @@ export default function LoginForm() {
           >
             Ingresar
           </button>
-          {error && <div className="text-red-500 text-sm py-1 px-3 mt-2">{error}</div>}
+          {error && (
+            <div className="text-red-500 text-sm py-1 px-3 mt-2">{error}</div>
+          )}
           <Link
             href="../register"
             className="text-sm mt-3 text-right text-blue-500 hover:underline"
